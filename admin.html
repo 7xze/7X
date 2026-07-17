@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7X Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a2e;--primary:#00843D;--primary-light:#00b84d;--white:#fff;--text:#e0e0e0;--text2:#8888a0;--border:#2a2a3e;--radius:12px;--danger:#ce1126;--danger-light:#ff3355;--success:#00cc66;--warn:#ffaa00}
+body{font-family:'Inter','Noto Kufi Arabic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+input,textarea,button{font-family:inherit}
+
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:48px 40px;width:100%;max-width:420px;text-align:center}
+.login-box .logo{font-size:2.5rem;font-weight:800;margin-bottom:8px}
+.login-box .logo span{color:var(--primary-light)}
+.login-box h2{font-size:1.3rem;font-weight:700;margin-bottom:8px;color:var(--white)}
+.login-box p{color:var(--text2);font-size:.85rem;margin-bottom:24px}
+.field{margin-bottom:16px;text-align:right}
+.field label{display:block;font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:6px}
+.field input{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--white);font-size:.9rem;outline:none;transition:.3s}
+.field input:focus{border-color:var(--primary)}
+.login-btn{width:100%;padding:14px;background:var(--primary);color:var(--white);border:none;border-radius:var(--radius);font-size:1rem;font-weight:700;cursor:pointer;transition:.3s;margin-top:8px}
+.login-btn:hover{background:var(--primary-light)}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-error{color:var(--danger-light);font-size:.85rem;margin-top:12px;display:none}
+.login-help{color:var(--text2);font-size:.75rem;margin-top:16px;line-height:1.6}
+
+.admin{display:none}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar .logo{font-size:1.3rem;font-weight:800;color:var(--white)}.topbar .logo span{color:var(--primary-light)}
+.topbar-status{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--text2)}
+.topbar-status .dot{width:8px;height:8px;border-radius:50%;background:var(--success)}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.publish-btn{padding:10px 24px;background:var(--primary);color:var(--white);border:none;border-radius:var(--radius);font-size:.85rem;font-weight:700;cursor:pointer;transition:.3s;display:flex;align-items:center;gap:6px}
+.publish-btn:hover{background:var(--primary-light)}
+.publish-btn:disabled{opacity:.5;cursor:not-allowed}
+.publish-btn .spinner{display:none;width:14px;height:14px;border:2px solid var(--white);border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logout-btn{padding:10px 16px;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;cursor:pointer;transition:.3s}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger-light)}
+
+.main{max-width:900px;margin:0 auto;padding:32px 24px}
+.tabs{display:flex;gap:4px;margin-bottom:32px;background:var(--bg2);padding:4px;border-radius:var(--radius);border:1px solid var(--border)}
+.tab{flex:1;padding:12px;text-align:center;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--text2);transition:.3s;border:none;background:transparent}
+.tab.active{background:var(--primary);color:var(--white)}
+.tab:hover:not(.active){background:var(--bg3);color:var(--white)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
+.card h3{font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.card h3 .icon{font-size:1.3rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:.85rem;outline:none;transition:.3s}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--primary)}
+.form-group textarea{min-height:100px;resize:vertical;line-height:1.6}
+.form-group .hint{font-size:.7rem;color:var(--text2);margin-top:4px}
+
+.repo-list{display:flex;flex-direction:column;gap:8px}
+.repo-item{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;transition:.3s}
+.repo-item:hover{border-color:var(--primary-light)}
+.repo-item span{font-size:.9rem;font-weight:500;color:var(--white)}
+.repo-item .del-btn{padding:6px 12px;background:transparent;color:var(--danger-light);border:1px solid var(--border);border-radius:6px;font-size:.75rem;cursor:pointer;transition:.3s}
+.repo-item .del-btn:hover{background:var(--danger);color:var(--white);border-color:var(--danger)}
+.add-row{display:flex;gap:8px;margin-top:12px}
+.add-row input{flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:.85rem;outline:none}
+.add-row input:focus{border-color:var(--primary)}
+.add-btn{padding:10px 20px;background:var(--primary);color:var(--white);border:none;border-radius:8px;font-weight:700;cursor:pointer;transition:.3s}
+.add-btn:hover{background:var(--primary-light)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:14px 28px;border-radius:var(--radius);font-size:.9rem;font-weight:600;z-index:1000;opacity:0;transition:.4s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.ok{background:var(--success);color:var(--white)}
+.toast.err{background:var(--danger);color:var(--white)}
+.toast.info{background:var(--primary);color:var(--white)}
+
+@media(max-width:640px){
+  .form-row{grid-template-columns:1fr}
+  .topbar{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginWrap">
+<div class="login-box">
+<div class="logo">7<span>X</span></div>
+<h2>Admin Panel</h2>
+<p>لوحة التحكم — إدارة محتوى الموقع</p>
+<div class="field">
+<label>كلمة السر</label>
+<input type="password" id="loginPass" placeholder="أدخل كلمة السر" onkeydown="if(event.key==='Enter')doLogin()">
+</div>
+<div class="field">
+<label>GitHub Token</label>
+<input type="password" id="loginToken" placeholder="ghp_..." onkeydown="if(event.key==='Enter')doLogin()">
+<div class="hint">تلقائياً محفوظ في المتصفح. أدخلها مرة واحدة.</div>
+</div>
+<button class="login-btn" id="loginBtn" onclick="doLogin()">دخول</button>
+<div class="login-error" id="loginError"></div>
+<div class="login-help">كلمة السر الافتراضية: <strong>admin123</strong><br>GitHub Token مطلوب لتعديل المحتوى</div>
+</div>
+</div>
+
+<div class="admin" id="adminPanel">
+<div class="topbar">
+<div class="topbar-right">
+<div class="logo">7<span>X</span> Admin</div>
+<div class="topbar-status"><div class="dot" id="statusDot"></div><span id="statusText">متصل</span></div>
+</div>
+<div class="topbar-left">
+<button class="publish-btn" id="publishBtn" onclick="publish()">
+<span class="spinner" id="spinner"></span>
+<span id="pubText">نشر التعديلات</span>
+</button>
+<button class="logout-btn" onclick="logout()">خروج</button>
+</div>
+</div>
+
+<div class="main">
+<div class="tabs">
+<div class="tab active" onclick="switchTab('hero')" id="tabHero">الرئيسية</div>
+<div class="tab" onclick="switchTab('about')" id="tabAbout">من أنا</div>
+<div class="tab" onclick="switchTab('company')" id="tabCompany">الشركة</div>
+<div class="tab" onclick="switchTab('apps')" id="tabApps">التطبيقات</div>
+<div class="tab" onclick="switchTab('repos')" id="tabRepos">المستودعات</div>
+<div class="tab" onclick="switchTab('contact')" id="tabContact">اتصل بنا</div>
+</div>
+
+<!-- Hero -->
+<div class="panel active" id="panelHero">
+<div class="card">
+<h3><span class="icon">🏠</span>القسم الرئيسي</h3>
+<div class="form-group">
+<label>العنوان الرئيسي (عربي)</label>
+<input type="text" id="hero_title_ar" placeholder="7X">
+</div>
+<div class="form-group">
+<label>Main Title (English)</label>
+<input type="text" id="hero_title_en" placeholder="7X">
+</div>
+<div class="form-group">
+<label>الشارة (عربي)</label>
+<input type="text" id="hero_badge_ar" placeholder="Engineering Intelligence Core">
+</div>
+<div class="form-group">
+<label>Badge (English)</label>
+<input type="text" id="hero_badge_en" placeholder="Engineering Intelligence Core">
+</div>
+</div>
+</div>
+
+<!-- About -->
+<div class="panel" id="panelAbout">
+<div class="card">
+<h3><span class="icon">👤</span>قسم من أنا</h3>
+<div class="form-group">
+<label>العنوان (عربي)</label>
+<input type="text" id="about_title_ar" placeholder="مهندس. مؤسس. صاحب رؤية">
+</div>
+<div class="form-group">
+<label>Title (English)</label>
+<input type="text" id="about_title_en" placeholder="Engineer. Founder. Visionary.">
+</div>
+<div class="form-group">
+<label>النص (عربي)</label>
+<textarea id="about_text_ar" placeholder="أنا مؤسس 7X Syria Ltd...."></textarea>
+</div>
+<div class="form-group">
+<label>Text (English)</label>
+<textarea id="about_text_en" placeholder="I am the founder of 7X Syria Ltd...."></textarea>
+</div>
+</div>
+</div>
+
+<!-- Company -->
+<div class="panel" id="panelCompany">
+<div class="card">
+<h3><span class="icon">🏢</span>بيانات الشركة</h3>
+<div class="form-row">
+<div class="form-group">
+<label>العنوان (عربي)</label>
+<input type="text" id="company_title_ar">
+</div>
+<div class="form-group">
+<label>Title (English)</label>
+<input type="text" id="company_title_en">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label>الوصف (عربي)</label>
+<input type="text" id="company_desc_ar">
+</div>
+<div class="form-group">
+<label>Description (English)</label>
+<input type="text" id="company_desc_en">
+</div>
+</div>
+</div>
+<div class="card" id="companyCardsCard">
+<h3><span class="icon">📋</span>بطاقات الشركة</h3>
+<div id="companyCardsEditor"></div>
+<button class="add-btn" onclick="addCompanyCard()" style="margin-top:12px">+ إضافة بطاقة</button>
+</div>
+</div>
+
+<!-- Apps -->
+<div class="panel" id="panelApps">
+<div class="card">
+<h3><span class="icon">📱</span>التطبيقات</h3>
+<div id="appsEditor"></div>
+<button class="add-btn" onclick="addApp()" style="margin-top:12px">+ إضافة تطبيق</button>
+</div>
+</div>
+
+<!-- Repos -->
+<div class="panel" id="panelRepos">
+<div class="card">
+<h3><span class="icon">📦</span>المستودعات</h3>
+<div class="repo-list" id="repoList"></div>
+<div class="add-row">
+<input type="text" id="newRepo" placeholder="اسم المستودع (مثل: vexa-app)" onkeydown="if(event.key==='Enter')addRepo()">
+<button class="add-btn" onclick="addRepo()">إضافة</button>
+</div>
+</div>
+</div>
+
+<!-- Contact -->
+<div class="panel" id="panelContact">
+<div class="card">
+<h3><span class="icon">📧</span>بيانات التواصل</h3>
+<div class="form-row">
+<div class="form-group">
+<label>البريد الإلكتروني</label>
+<input type="email" id="contact_email" placeholder="contact@7xsyria.com">
+</div>
+<div class="form-group">
+<label>Matrix ID</label>
+<input type="text" id="contact_matrix" placeholder="@7x:matrix.org">
+</div>
+</div>
+<div class="form-group">
+<label>GitHub Username</label>
+<input type="text" id="contact_github" placeholder="7xze">
+</div>
+</div>
+<div class="card">
+<h3><span class="icon">🔒</span>تغيير كلمة السر</h3>
+<div class="form-group">
+<label>كلمة السر الجديدة</label>
+<input type="password" id="newPassword" placeholder="كلمة سر جديدة">
+</div>
+<button class="add-btn" onclick="changePassword()">حفظ كلمة السر</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var OWNER='7xze',REPO='7X',BRANCH='main',CONTENT_FILE='content.json';
+var TOKEN=localStorage.getItem('gh_token')||'';
+var PASS=localStorage.getItem('admin_pass')||'admin123';
+var DATA={};
+var SHA='';
+
+function toast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+type;
+  setTimeout(function(){t.className='toast'},3000);
+}
+
+function api(path,opts){
+  opts=opts||{};
+  var h={'Authorization':'token '+TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
+  if(opts.method) h.Method=opts.method;
+  var url='https://api.github.com'+path;
+  var fetchOpts={method:opts.method||'GET',headers:h};
+  if(opts.body) fetchOpts.body=JSON.stringify(opts.body);
+  return fetch(url,fetchOpts).then(function(r){
+    if(!r.ok) return r.json().then(function(e){throw new Error(e.message||r.statusText)});
+    if(opts.method==='HEAD') return r;
+    return r.json();
+  });
+}
+
+function doLogin(){
+  var pass=document.getElementById('loginPass').value;
+  var token=document.getElementById('loginToken').value||TOKEN;
+  if(!pass){document.getElementById('loginError').textContent='أدخل كلمة السر';document.getElementById('loginError').style.display='block';return}
+  if(pass!==PASS){document.getElementById('loginError').textContent='كلمة السر خاطئة';document.getElementById('loginError').style.display='block';return}
+  if(token){TOKEN=token;localStorage.setItem('gh_token',token)}
+  localStorage.setItem('admin_pass',PASS);
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  loadContent();
+}
+
+function logout(){
+  localStorage.removeItem('gh_token');
+  TOKEN='';
+  document.getElementById('loginWrap').style.display='flex';
+  document.getElementById('adminPanel').style.display='none';
+}
+
+function loadContent(){
+  document.getElementById('statusText').textContent='جاري التحميل...';
+  document.getElementById('statusDot').style.background='var(--warn)';
+  api('/repos/'+OWNER+'/'+REPO+'/contents/'+CONTENT_FILE).then(function(r){
+    SHA=r.sha;
+    DATA=JSON.parse(atob(r.content));
+    fillForm();
+    document.getElementById('statusText').textContent='متصل';
+    document.getElementById('statusDot').style.background='var(--success)';
+    toast('تم تحميل المحتوى','ok');
+  }).catch(function(e){
+    document.getElementById('statusText').textContent='خطأ';
+    document.getElementById('statusDot').style.background='var(--danger)';
+    toast('خطأ في التحميل: '+e.message,'err');
+  });
+}
+
+function fillForm(){
+  var f=function(id,v){var el=document.getElementById(id);if(el&&v!==undefined)el.value=v};
+  f('hero_title_ar',DataGet('hero_title','ar'));
+  f('hero_title_en',DataGet('hero_title','en'));
+  f('hero_badge_ar',DataGet('hero_badge','ar'));
+  f('hero_badge_en',DataGet('hero_badge','en'));
+  f('about_title_ar',DataGet('about_title','ar'));
+  f('about_title_en',DataGet('about_title','en'));
+  f('about_text_ar',DataGet('about_text','ar'));
+  f('about_text_en',DataGet('about_text','en'));
+  f('company_title_ar',DataGet('company_title','ar'));
+  f('company_title_en',DataGet('company_title','en'));
+  f('company_desc_ar',DataGet('company_desc','ar'));
+  f('company_desc_en',DataGet('company_desc','en'));
+  f('contact_email',DataGet('contact_email',''));
+  f('contact_matrix',DataGet('contact_matrix',''));
+  f('contact_github',DataGet('contact_github',''));
+  renderCompanyCards();
+  renderApps();
+  renderRepos();
+}
+
+function DataGet(key,lang){
+  if(lang==='') return DATA[key]||'';
+  if(!DATA[key]) return '';
+  return DATA[key][lang]||'';
+}
+
+function renderCompanyCards(){
+  var cards=DATA.company_cards||[];
+  var c=document.getElementById('companyCardsEditor');
+  c.innerHTML='';
+  cards.forEach(function(card,i){
+    c.innerHTML+='<div class="repo-item" style="flex-direction:column;align-items:stretch;gap:8px">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center">'
+      +'<span style="font-size:.9rem;font-weight:600">'+card.icon+' '+card.title+'</span>'
+      +'<button class="del-btn" onclick="removeCompanyCard('+i+')">حذف</button></div>'
+      +'<input style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="Icon (emoji)" value="'+(card.icon||'')+'" onchange="updateCompanyCard('+i+',\'icon\',this.value)">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="العنوان عربي" value="'+esc(card.title||'')+'" onchange="updateCompanyCard('+i+',\'title\',this.value)">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="Title EN" value="'+esc(card.titleEn||'')+'" onchange="updateCompanyCard('+i+',\'titleEn\',this.value)">'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="الوصف عربي" value="'+esc(card.desc||'')+'" onchange="updateCompanyCard('+i+',\'desc\',this.value)">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="Desc EN" value="'+esc(card.descEn||'')+'" onchange="updateCompanyCard('+i+',\'descEn\',this.value)">'
+      +'</div></div>';
+  });
+}
+
+function renderApps(){
+  var apps=DATA.apps||[];
+  var c=document.getElementById('appsEditor');
+  c.innerHTML='';
+  apps.forEach(function(app,i){
+    c.innerHTML+='<div class="repo-item" style="flex-direction:column;align-items:stretch;gap:8px">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center">'
+      +'<span style="font-size:.9rem;font-weight:600">'+(app.icon||'')+' '+(app.name||'')+'</span>'
+      +'<button class="del-btn" onclick="removeApp('+i+')">حذف</button></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="Icon" value="'+(app.icon||'')+'" onchange="updateApp('+i+',\'icon\',this.value)">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="Name" value="'+esc(app.name||'')+'" onchange="updateApp('+i+',\'name\',this.value)">'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="الوصف عربي" value="'+esc(app.desc||'')+'" onchange="updateApp('+i+',\'desc\',this.value)">'
+      +'<input style="padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="Desc EN" value="'+esc(app.descEn||'')+'" onchange="updateApp('+i+',\'descEn\',this.value)">'
+      +'</div>'
+      +'<input style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.85rem" placeholder="GitHub URL" value="'+esc(app.link||'')+'" onchange="updateApp('+i+',\'link\',this.value)">'
+      +'</div>';
+  });
+}
+
+function renderRepos(){
+  var repos=DATA.repos||[];
+  var rl=document.getElementById('repoList');
+  rl.innerHTML='';
+  repos.forEach(function(r,i){
+    rl.innerHTML+='<div class="repo-item"><span>'+r+'</span><button class="del-btn" onclick="removeRepo('+i+')">حذف</button></div>';
+  });
+}
+
+function esc(s){return String(s||'').replace(/"/g,'&quot;')}
+
+function DataPut(key,lang,val){
+  if(lang===''){DATA[key]=val;return}
+  if(!DATA[key]) DATA[key]={};
+  DATA[key][lang]=val;
+}
+
+function saveForm(){
+  DataPut('hero_title','ar',gv('hero_title_ar'));
+  DataPut('hero_title','en',gv('hero_title_en'));
+  DataPut('hero_badge','ar',gv('hero_badge_ar'));
+  DataPut('hero_badge','en',gv('hero_badge_en'));
+  DataPut('about_title','ar',gv('about_title_ar'));
+  DataPut('about_title','en',gv('about_title_en'));
+  DataPut('about_text','ar',gv('about_text_ar'));
+  DataPut('about_text','en',gv('about_text_en'));
+  DataPut('company_title','ar',gv('company_title_ar'));
+  DataPut('company_title','en',gv('company_title_en'));
+  DataPut('company_desc','ar',gv('company_desc_ar'));
+  DataPut('company_desc','en',gv('company_desc_en'));
+  DataPut('contact_email','',gv('contact_email'));
+  DataPut('contact_matrix','',gv('contact_matrix'));
+  DataPut('contact_github','',gv('contact_github'));
+}
+
+function gv(id){return document.getElementById(id).value}
+
+function addCompanyCard(){
+  if(!DATA.company_cards) DATA.company_cards=[];
+  DATA.company_cards.push({icon:'🎯',title:'New Card',titleEn:'New Card',desc:'',descEn:''});
+  renderCompanyCards();
+}
+function removeCompanyCard(i){DATA.company_cards.splice(i,1);renderCompanyCards()}
+function updateCompanyCard(i,field,val){DATA.company_cards[i][field]=val}
+
+function addApp(){
+  if(!DATA.apps) DATA.apps=[];
+  DATA.apps.push({icon:'📦',name:'New App',desc:'',descEn:'',link:''});
+  renderApps();
+}
+function removeApp(i){DATA.apps.splice(i,1);renderApps()}
+function updateApp(i,field,val){DATA.apps[i][field]=val}
+
+function addRepo(){
+  var v=document.getElementById('newRepo').value.trim();
+  if(!v){return}
+  if(!DATA.repos) DATA.repos=[];
+  DATA.repos.push(v);
+  document.getElementById('newRepo').value='';
+  renderRepos();
+}
+function removeRepo(i){DATA.repos.splice(i,1);renderRepos()}
+
+function changePassword(){
+  var np=document.getElementById('newPassword').value.trim();
+  if(!np){toast('أدخل كلمة سر جديدة','err');return}
+  PASS=np;
+  localStorage.setItem('admin_pass',PASS);
+  document.getElementById('newPassword').value='';
+  toast('تم تغيير كلمة السر','ok');
+}
+
+function publish(){
+  saveForm();
+  var btn=document.getElementById('publishBtn');
+  var spinner=document.getElementById('spinner');
+  var pubText=document.getElementById('pubText');
+  btn.disabled=true;
+  spinner.style.display='inline-block';
+  pubText.textContent='جاري النشر...';
+
+  var content=JSON.stringify(DATA,null,2);
+  var encoded=btoa(unescape(encodeURIComponent(content)));
+
+  api('/repos/'+OWNER+'/'+REPO+'/contents/'+CONTENT_FILE,{
+    method:'PUT',
+    body:{message:'Admin panel: update content',content:encoded,sha:SHA,branch:BRANCH}
+  }).then(function(r){
+    SHA=r.content.sha;
+    btn.disabled=false;
+    spinner.style.display='none';
+    pubText.textContent='نشر التعديلات';
+    toast('تم النشر بنجاح! الموقع محدّث ✅','ok');
+  }).catch(function(e){
+    btn.disabled=false;
+    spinner.style.display='none';
+    pubText.textContent='نشر التعديلات';
+    toast('خطأ في النشر: '+e.message,'err');
+  });
+}
+
+function switchTab(name){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('panel'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+  document.getElementById('tab'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+}
+
+// Auto-login if token saved
+if(TOKEN && localStorage.getItem('admin_pass')){
+  document.getElementById('loginPass').value=localStorage.getItem('admin_pass');
+  document.getElementById('loginToken').value=TOKEN;
+}
+</script>
+</body>
+</html>
