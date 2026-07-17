@@ -1,0 +1,465 @@
+#!/usr/bin/env python3
+"""7X Website Generator — builds index.html from Python"""
+
+import os
+
+SECTIONS = {
+    "nav": """
+    <nav>
+      <div class="container">
+        <div class="logo">7<span>X</span></div>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#company">Company</a></li>
+          <li><a href="#apps">Apps</a></li>
+          <li><a href="#repos">Repos</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#contact" class="btn btn-primary nav-cta">Get in touch</a>
+      </div>
+    </nav>""",
+
+    "hero": """
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <div class="hero-badge">Engineering Intelligence Core</div>
+        <h1>7X</h1>
+        <p>Building secure, open-source technology for Syria and beyond. Engineering the future of digital communication.</p>
+        <div class="hero-cta">
+          <a href="#about" class="btn btn-primary">Explore</a>
+          <a href="#repos" class="btn btn-outline">View Repositories</a>
+        </div>
+      </div>
+    </section>""",
+
+    "about": """
+    <section id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-text">
+            <div class="section-tag">Who I Am</div>
+            <h3>Engineer. Founder. Visionary.</h3>
+            <p>I am the founder of <strong>7X Syria Ltd.</strong> — a Syrian technology company dedicated to building secure, open-source communication tools. My work focuses on end-to-end encrypted messaging, Android development, and Matrix protocol technologies.</p>
+            <p>With expertise in Kotlin, Jetpack Compose, Rust, and distributed systems, I lead the development of <strong>Alttyar</strong>, a privacy-first Matrix messaging platform for Android.</p>
+            <div class="about-stats">
+              <div class="stat-card"><div class="num">10+</div><div class="label">Projects</div></div>
+              <div class="stat-card"><div class="num">5+</div><div class="label">Years Building</div></div>
+              <div class="stat-card"><div class="num">100%</div><div class="label">Open Source</div></div>
+            </div>
+          </div>
+          <div class="about-visual">
+            <div class="about-flag">🇸🇾</div>
+            <h4>Proudly Syrian</h4>
+            <p class="about-moto">صنع في سوريا</p>
+            <div class="about-tags">
+              <span>Kotlin</span><span>Compose</span><span>Rust</span>
+              <span>Matrix</span><span>Android</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>""",
+
+    "company": """
+    <section id="company">
+      <div class="container">
+        <div class="section-center">
+          <div class="section-tag">The Company</div>
+          <h2 class="section-title">7X Syria Ltd.</h2>
+          <p class="section-subtitle">Engineering Intelligence Core — Building secure technology for a connected future.</p>
+        </div>
+        <div class="company-cards">
+          <div class="company-card">
+            <div class="card-icon">🎯</div>
+            <h4>Mission</h4>
+            <p>Democratising secure communication across Syria and the Arab world through open-source, end-to-end encrypted technology.</p>
+          </div>
+          <div class="company-card">
+            <div class="card-icon">🛡️</div>
+            <h4>Security First</h4>
+            <p>Privacy is not optional. Every product is built with zero-knowledge architecture and the strongest encryption standards.</p>
+          </div>
+          <div class="company-card">
+            <div class="card-icon">🌍</div>
+            <h4>Open Source</h4>
+            <p>100% of our code is open source. We believe in transparent technology that anyone can audit, contribute to, and trust.</p>
+          </div>
+          <div class="company-card">
+            <div class="card-icon">🇸🇾</div>
+            <h4>Made in Syria</h4>
+            <p>Proudly Syrian. We represent Syrian engineering excellence on the global stage.</p>
+          </div>
+        </div>
+      </div>
+    </section>""",
+
+    "apps": """
+    <section id="apps">
+      <div class="container">
+        <div class="section-center">
+          <div class="section-tag">Applications</div>
+          <h2 class="section-title">Our Apps</h2>
+          <p class="section-subtitle">Secure, modern applications built with cutting-edge technology.</p>
+        </div>
+        <div class="apps-grid">
+          <div class="app-card">
+            <div class="app-icon">💬</div>
+            <h4>Alttyar</h4>
+            <p>End-to-end encrypted Matrix messaging app for Android. Secure, fast, and built for privacy.</p>
+            <a href="https://github.com/7xze/Alttyar-Android-app" class="app-link">View on GitHub &rarr;</a>
+          </div>
+          <div class="app-card">
+            <div class="app-icon">⚡</div>
+            <h4>Alttyar-Backend</h4>
+            <p>Backend services powering the Alttyar ecosystem. Built for scale and reliability.</p>
+            <a href="https://github.com/7xze/Altyyar-serves" class="app-link">View on GitHub &rarr;</a>
+          </div>
+          <div class="app-card">
+            <div class="app-icon">🤖</div>
+            <h4>Vexa-Ai-Hacke</h4>
+            <p>AI-powered tools and experiments. Pushing the boundaries of what's possible.</p>
+            <a href="https://github.com/7xze/Vexa-Ai-Hacke" class="app-link">View on GitHub &rarr;</a>
+          </div>
+          <div class="app-card">
+            <div class="app-icon">📱</div>
+            <h4>Vexa Android</h4>
+            <p>Android application suite with modern architecture and clean code.</p>
+            <a href="https://github.com/7xze/Vexa-Android-app" class="app-link">View on GitHub &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>""",
+
+    "repos": """
+    <section id="repos">
+      <div class="container">
+        <div class="section-center">
+          <div class="section-tag">Repositories</div>
+          <h2 class="section-title">Our Code</h2>
+          <p class="section-subtitle">All projects are open source. Contributions welcome.</p>
+        </div>
+        <div class="repos-grid">
+          <a href="https://github.com/7xze/Alttyar-Android-app" class="repo-card">
+            <div class="repo-info"><h4>Alttyar-Android-app</h4><p>Matrix messaging app</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/Altyyar-serves" class="repo-card">
+            <div class="repo-info"><h4>Altyyar-serves</h4><p>Backend services</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/Alttyar-apk" class="repo-card">
+            <div class="repo-info"><h4>Alttyar-apk</h4><p>Release builds</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/Vexa-Ai-Hacke" class="repo-card">
+            <div class="repo-info"><h4>Vexa-Ai-Hacke</h4><p>AI experiments</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/Vexa-Android-app" class="repo-card">
+            <div class="repo-info"><h4>Vexa-Android-app</h4><p>Android suite</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/Vexa-serves" class="repo-card">
+            <div class="repo-info"><h4>Vexa-serves</h4><p>Backend services</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/Vexa-apk" class="repo-card">
+            <div class="repo-info"><h4>Vexa-apk</h4><p>APK distribution</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+          <a href="https://github.com/7xze/vexa-src" class="repo-card">
+            <div class="repo-info"><h4>vexa-src</h4><p>Source code</p></div>
+            <span class="repo-arrow">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>""",
+
+    "contact": """
+    <section id="contact">
+      <div class="container">
+        <div class="section-center">
+          <div class="section-tag">Contact</div>
+          <h2 class="section-title">Get in Touch</h2>
+          <p class="section-subtitle">Have a question or want to collaborate? Reach out.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h3>Let's talk</h3>
+            <p>Always open to new projects, creative ideas, and opportunities.</p>
+            <div class="contact-item">
+              <div class="ci-icon">📧</div>
+              <div class="ci-text"><h5>Email</h5><span>contact@7xsyria.com</span></div>
+            </div>
+            <div class="contact-item">
+              <div class="ci-icon">💬</div>
+              <div class="ci-text"><h5>Matrix</h5><span>@7x:matrix.org</span></div>
+            </div>
+            <div class="contact-item">
+              <div class="ci-icon">🐙</div>
+              <div class="ci-text"><h5>GitHub</h5><span>github.com/7xze</span></div>
+            </div>
+          </div>
+          <form class="contact-form" action="mailto:contact@7xsyria.com" method="get" enctype="text/plain">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <input type="text" placeholder="Subject">
+            <textarea placeholder="Your Message..." required></textarea>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>""",
+
+    "footer": """
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 <span class="syria">7X Syria Ltd.</span> &mdash; <strong>صنع في سوريا</strong> &mdash; Made in Syria</p>
+        <p class="footer-tagline">Engineering Intelligence Core</p>
+      </div>
+    </footer>""",
+}
+
+CSS = """
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --bg3: #1a1a2e;
+  --primary: #00843D;
+  --primary-light: #00b84d;
+  --accent: #ce1126;
+  --white: #ffffff;
+  --text: #e0e0e0;
+  --text-muted: #8888a0;
+  --border: #2a2a3e;
+  --radius: 12px;
+  --max-width: 1100px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+a { color: var(--primary-light); text-decoration: none; transition: all 0.3s ease; }
+a:hover { color: var(--white); }
+img { max-width: 100%; }
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+/* Nav */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+nav .logo { font-weight: 800; font-size: 1.4rem; color: var(--white); letter-spacing: 2px; }
+nav .logo span { color: var(--primary-light); }
+nav ul { display: flex; gap: 32px; list-style: none; }
+nav ul a { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+nav ul a:hover { color: var(--white); }
+
+/* Hero */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  text-align: center; position: relative; overflow: hidden;
+  padding: 120px 0 80px;
+}
+.hero::before {
+  content: ''; position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,132,61,0.15) 0%, transparent 70%);
+  top: -200px; right: -200px; border-radius: 50%; pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(206,17,38,0.1) 0%, transparent 70%);
+  bottom: -100px; left: -100px; border-radius: 50%; pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block; padding: 8px 20px; border-radius: 50px;
+  background: rgba(0,132,61,0.15); border: 1px solid rgba(0,132,61,0.3);
+  color: var(--primary-light); font-size: 0.8rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 900; line-height: 1.1;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--white) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 32px; }
+
+/* Buttons */
+.btn {
+  display: inline-block; padding: 14px 36px; border-radius: 50px;
+  font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;
+  border: none; text-transform: uppercase; letter-spacing: 1px;
+}
+.btn-primary { background: var(--primary); color: var(--white); }
+.btn-primary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,132,61,0.3); }
+.btn-outline { background: transparent; color: var(--white); border: 2px solid var(--border); }
+.btn-outline:hover { border-color: var(--primary-light); color: var(--primary-light); transform: translateY(-2px); }
+.nav-cta { padding: 10px 24px; font-size: 0.75rem; }
+.hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* Sections */
+section { padding: 100px 0; }
+#company, #repos { background: var(--bg2); }
+.section-center { text-align: center; margin-bottom: 48px; }
+.section-tag {
+  display: inline-block; padding: 6px 16px; border-radius: 50px;
+  background: rgba(0,132,61,0.1); border: 1px solid rgba(0,132,61,0.2);
+  color: var(--primary-light); font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+}
+.section-title { font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800; margin-bottom: 16px; color: var(--white); }
+.section-subtitle { color: var(--text-muted); max-width: 600px; margin: 0 auto 48px; font-size: 1.05rem; }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.about-text h3 { font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700; margin-bottom: 20px; color: var(--white); }
+.about-text p { color: var(--text-muted); margin-bottom: 16px; font-size: 1.05rem; }
+.about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+.stat-card .num { font-size: 2rem; font-weight: 800; color: var(--primary-light); }
+.stat-card .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+.about-visual {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 48px; text-align: center;
+}
+.about-flag { font-size: 5rem; margin-bottom: 16px; }
+.about-visual h4 { color: var(--white); font-weight: 700; }
+.about-moto { color: var(--text-muted); margin: 8px 0 24px; }
+.about-tags { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.about-tags span {
+  padding: 6px 14px; background: var(--bg3); border-radius: 50px;
+  font-size: 0.75rem; color: var(--text-muted);
+}
+
+/* Company */
+.company-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.company-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 36px; transition: all 0.3s ease;
+}
+.company-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+.card-icon { font-size: 2rem; margin-bottom: 16px; }
+.company-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--white); }
+.company-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+/* Apps */
+.apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.app-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 32px; transition: all 0.3s ease;
+}
+.app-card:hover { border-color: var(--primary-light); transform: translateY(-4px); }
+.app-icon {
+  width: 56px; height: 56px; border-radius: 14px; background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 16px;
+}
+.app-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: var(--white); }
+.app-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; }
+.app-link { font-size: 0.8rem; font-weight: 600; color: var(--primary-light); }
+
+/* Repos */
+.repos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.repo-card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px 24px; display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.3s ease; color: var(--text);
+}
+.repo-card:hover { border-color: var(--primary-light); color: var(--white); }
+.repo-info h4 { font-size: 1rem; font-weight: 600; color: inherit; margin-bottom: 4px; }
+.repo-info p { font-size: 0.8rem; color: var(--text-muted); }
+.repo-arrow { color: var(--text-muted); font-size: 1.2rem; transition: all 0.3s ease; }
+.repo-card:hover .repo-arrow { color: var(--primary-light); transform: translateX(4px); }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.contact-info h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; color: var(--white); }
+.contact-info > p { color: var(--text-muted); margin-bottom: 32px; }
+.contact-item { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.ci-icon {
+  width: 48px; height: 48px; border-radius: 12px; background: var(--bg2);
+  border: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+}
+.ci-text h5 { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+.ci-text span { font-size: 0.8rem; color: var(--text-muted); }
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.contact-form input, .contact-form textarea {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; font-family: inherit; font-size: 0.9rem; color: var(--white);
+  outline: none; transition: all 0.3s ease;
+}
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--primary); }
+.contact-form textarea { min-height: 140px; resize: vertical; }
+.contact-form .btn { align-self: flex-start; }
+
+/* Footer */
+footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; }
+footer p { color: var(--text-muted); font-size: 0.85rem; }
+footer .syria { color: var(--primary-light); font-weight: 600; }
+.footer-tagline { margin-top: 8px; font-size: 0.75rem; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  nav ul { display: none; }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .contact-grid { grid-template-columns: 1fr; }
+  section { padding: 60px 0; }
+  .about-stats { grid-template-columns: 1fr; }
+}
+"""
+
+HEAD = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7X — Engineering Intelligence Core</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>""" + CSS + """</style>
+</head>
+<body>"""
+
+FOOT = """</body>
+</html>"""
+
+
+def build():
+    parts = [HEAD, SECTIONS["nav"], SECTIONS["hero"],
+             SECTIONS["about"], SECTIONS["company"],
+             SECTIONS["apps"], SECTIONS["repos"],
+             SECTIONS["contact"], SECTIONS["footer"], FOOT]
+    html = "\n".join(parts)
+
+    out_path = os.path.join(os.path.dirname(__file__), "index.html")
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(html)
+
+    print(f"[OK] Site built: {out_path} ({os.path.getsize(out_path):,} bytes)")
+
+
+if __name__ == "__main__":
+    build()
