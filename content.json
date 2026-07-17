@@ -1,10 +1,25 @@
 {
   "hero_title": { "ar": "7X", "en": "7X" },
   "hero_badge": { "ar": "نواة الهندسة الذكية", "en": "Engineering Intelligence Core" },
-  "hero_subtitle": { "ar": "بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم", "en": "Building secure, open-source technology for Syria and beyond" },
-  "about_title": { "ar": "مَهندس. مؤسس. صاحب رؤية", "en": "Engineer. Founder. Visionary." },
-  "about_text": { "ar": "أنا مؤسس شركة 7X Syria Ltd. — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر.", "en": "I am the founder of 7X Syria Ltd. — a Syrian technology company dedicated to building secure, open-source communication tools." },
+  "hero_sub": { "ar": "بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم", "en": "Building secure, open-source technology for Syria and beyond" },
+  "about_title": { "ar": "مهندس. مؤسس. صاحب رؤية.", "en": "Engineer. Founder. Visionary." },
+  "about_text": { "ar": "أنا مؤسس <strong>7X Syria Ltd.</strong> — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر. أركز على تطبيقات Android المشفّرة وبروتوكول Matrix.", "en": "I am the founder of <strong>7X Syria Ltd.</strong> — a Syrian technology company dedicated to building secure, open-source communication tools." },
   "company_title": { "ar": "7X Syria Ltd.", "en": "7X Syria Ltd." },
   "company_desc": { "ar": "نواة الهندسة الذكية — نبني تقنية آمنة لمستقبل متصل.", "en": "Engineering Intelligence Core — Building secure technology for a connected future." },
-  "footer_text": { "ar": "7X Syria Ltd. — صنع في سوريا", "en": "7X Syria Ltd. — Made in Syria" }
+  "company_cards": [
+    { "icon": "🎯", "title": "المهمة", "titleEn": "Mission", "desc": "إضفاء الطابع الديمقراطي على التواصل الآمن في سوريا والعالم العربي.", "descEn": "Democratising secure communication across Syria and the Arab world." },
+    { "icon": "🛡️", "title": "الأمان أولاً", "titleEn": "Security First", "desc": "الخصوصية ليست خياراً. كل منتج مبني بأقوى معايير التشفير.", "descEn": "Privacy is not optional. Every product is built with the strongest encryption." },
+    { "icon": "🌍", "title": "مفتوح المصدر", "titleEn": "Open Source", "desc": "100% من كودنا مفتوح المصدر. تقنية شفافة يمكن للجميع تدقيقها.", "descEn": "100% of our code is open source. Transparent technology anyone can audit." },
+    { "icon": "🇸🇾", "title": "صنع في سوريا", "titleEn": "Made in Syria", "desc": "نفتخر بأننا سوريون. نمثل الهندسة السورية على المستوى العالمي.", "descEn": "Proudly Syrian. Representing Syrian engineering globally." }
+  ],
+  "apps": [
+    { "icon": "💬", "name": "Alttyar", "desc": "تطبيق مراسلة Matrix مشفّر لنظام Android.", "descEn": "End-to-end encrypted Matrix messaging for Android.", "link": "https://github.com/7xze/Alttyar-Android-app" },
+    { "icon": "⚡", "name": "Alttyar-Backend", "desc": "خدمات الخلفية لمنصة Alttyar.", "descEn": "Backend services for the Alttyar ecosystem.", "link": "https://github.com/7xze/Altyyar-serves" },
+    { "icon": "🤖", "name": "Vexa-Ai-Hacke", "desc": "أدوات وتجارب بالذكاء الاصطناعي.", "descEn": "AI-powered tools and experiments.", "link": "https://github.com/7xze/Vexa-Ai-Hacke" },
+    { "icon": "📱", "name": "Vexa Android", "desc": "مجموعة تطبيقات Android بهندسة عصرية.", "descEn": "Android app suite with modern architecture.", "link": "https://github.com/7xze/Vexa-Android-app" }
+  ],
+  "repos": ["Alttyar-Android-app", "Altyyar-serves", "Alttyar-apk", "Vexa-Ai-Hacke", "Vexa-Android-app", "Vexa-serves", "Vexa-apk", "vexa-src"],
+  "contact_email": "contact@7xsyria.com",
+  "contact_matrix": "@7x:matrix.org",
+  "contact_github": "7xze"
 }

@@ -147,13 +147,17 @@ body{font-family:'Inter','Noto Kufi Arabic',sans-serif;background:var(--bg);colo
 <p>لوحة التحكم — إدارة الموقع والمحتوى</p>
 </div>
 <div class="field">
-<label>كلمة السر</label>
-<input type="password" id="lgPass" placeholder="أدخل كلمة السر">
+<label>اسم المستخدم</label>
+<input type="text" id="lgUser" placeholder="اسم المستخدم" value="admin">
 </div>
 <div class="field">
-<label>GitHub Personal Access Token</label>
+<label>كلمة المرور</label>
+<input type="password" id="lgPass" placeholder="أدخل كلمة المرور">
+</div>
+<div class="field">
+<label>GitHub Token</label>
 <input type="password" id="lgToken" placeholder="ghp_xxxxxxxxxxxx">
-<div class="hint">يُحفظ في المتصفح فقط. أدخله مرة واحدة. ي requires صلاحية repo</div>
+<div class="hint">يُحفظ في المتصفح. أدخله مرة واحدة فقط. يrequires صلاحية repo</div>
 </div>
 <button class="login-btn" onclick="doLogin()">دخول</button>
 <div class="login-err" id="lgErr"></div>
@@ -366,17 +370,18 @@ function ghFetch(path,opts){
 }
 
 function doLogin(){
+  var u=document.getElementById('lgUser').value.trim();
   var p=document.getElementById('lgPass').value;
   var t=document.getElementById('lgToken').value.trim()||TOKEN;
   var err=document.getElementById('lgErr');
-  if(!p){err.textContent='أدخل كلمة السر';err.style.display='block';return}
-  if(p!==PASS){err.textContent='كلمة السر خاطئة';err.style.display='block';return}
+  if(!u||!p){err.textContent='أدخل اسم المستخدم وكلمة المرور';err.style.display='block';return}
+  if(u!=='admin'||p!==PASS){err.textContent='اسم المستخدم أو كلمة المرور خاطئة';err.style.display='block';return}
   if(!t){err.textContent='أدخل GitHub Token';err.style.display='block';return}
-  TOKEN=t;localStorage.setItem('gh7x_token',t);localStorage.setItem('gh7x_pass',p);
+  TOKEN=t;localStorage.setItem('gh7x_token',t);localStorage.setItem('gh7x_pass',p);localStorage.setItem('gh7x_user',u);
   err.style.display='none';
   document.getElementById('loginPage').style.display='none';
   document.getElementById('app').style.display='block';
-  addLog('تسجيل دخول ناجح','ok');
+  addLog('تسجيل دخول: '+u,'ok');
   loadContent();
 }
 
@@ -515,6 +520,7 @@ function go(id){
 
 // Auto-fill if saved
 if(TOKEN&&localStorage.getItem('gh7x_pass')){
+  document.getElementById('lgUser').value=localStorage.getItem('gh7x_user')||'admin';
   document.getElementById('lgPass').value=localStorage.getItem('gh7x_pass');
   document.getElementById('lgToken').value=TOKEN;
 }

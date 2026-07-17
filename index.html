@@ -255,30 +255,9 @@ footer .tagline{margin-top:6px;font-size:.72rem;color:var(--text3)}
 </footer>
 
 <script>
-var CD={ar:[
-{ic:'🎯',t:'المهمة',d:'إضفاء الطابع الديمقراطي على التواصل الآمن في سوريا والعالم العربي.'},
-{ic:'🛡️',t:'الأمان أولاً',d:'الخصوصية ليست خياراً. كل منتج مبني بأقوى معايير التشفير.'},
-{ic:'🌍',t:'مفتوح المصدر',d:'100% من كودنا مفتوح المصدر. تقنية شفافة يمكن للجميع تدقيقها.'},
-{ic:'🇸🇾',t:'صنع في سوريا',d:'نفتخر بأننا سوريون. نمثل الهندسة السورية على المستوى العالمي.'}
-],en:[
-{ic:'🎯',t:'Mission',d:'Democratising secure communication across Syria and the Arab world.'},
-{ic:'🛡️',t:'Security First',d:'Privacy is not optional. Every product is built with the strongest encryption.'},
-{ic:'🌍',t:'Open Source',d:'100% of our code is open source. Transparent technology anyone can audit.'},
-{ic:'🇸🇾',t:'Made in Syria',d:'Proudly Syrian. Representing Syrian engineering globally.'}
-]};
-var AD={ar:[
-{ic:'💬',n:'Alttyar',d:'تطبيق مراسلة Matrix مشفّر لنظام Android.',l:'https://github.com/7xze/Alttyar-Android-app'},
-{ic:'⚡',n:'Alttyar-Backend',d:'خدمات الخلفية لمنصة Alttyar.',l:'https://github.com/7xze/Altyyar-serves'},
-{ic:'🤖',n:'Vexa-Ai-Hacke',d:'أدوات وتجارب بالذكاء الاصطناعي.',l:'https://github.com/7xze/Vexa-Ai-Hacke'},
-{ic:'📱',n:'Vexa Android',d:'مجموعة تطبيقات Android بهندسة عصرية.',l:'https://github.com/7xze/Vexa-Android-app'}
-],en:[
-{ic:'💬',n:'Alttyar',d:'End-to-end encrypted Matrix messaging for Android.',l:'https://github.com/7xze/Alttyar-Android-app'},
-{ic:'⚡',n:'Alttyar-Backend',d:'Backend services for the Alttyar ecosystem.',l:'https://github.com/7xze/Altyyar-serves'},
-{ic:'🤖',n:'Vexa-Ai-Hacke',d:'AI-powered tools and experiments.',l:'https://github.com/7xze/Vexa-Ai-Hacke'},
-{ic:'📱',n:'Vexa Android',d:'Android app suite with modern architecture.',l:'https://github.com/7xze/Vexa-Android-app'}
-]};
-var RL=['Alttyar-Android-app','Altyyar-serves','Alttyar-apk','Vexa-Ai-Hacke','Vexa-Android-app','Vexa-serves','Vexa-apk','vexa-src'];
+var D={};
 var lang=localStorage.getItem('lang7x')||'ar';
+var gh='https://github.com/7xze/';
 
 function setLang(l){
   lang=l;var ar=l==='ar';
@@ -288,7 +267,6 @@ function setLang(l){
   var nl=ar?['من أنا','الشركة','التطبيقات','المستودعات','اتصل بنا']:['About','Company','Apps','Repos','Contact'];
   var na=document.querySelectorAll('nav ul li:not(.lang-sw) a');
   for(var i=0;i<na.length;i++)na[i].textContent=nl[i];
-  document.getElementById('hsub').textContent=ar?'بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم':'Building secure, open-source technology for Syria and beyond';
   document.querySelectorAll('[data-ar]').forEach(function(e){e.textContent=e.getAttribute('data-'+l)});
   document.querySelectorAll('.btn[data-ar]').forEach(function(e){e.textContent=e.getAttribute('data-'+l)});
   document.getElementById('fN').placeholder=ar?'الاسم':'Your Name';
@@ -298,28 +276,45 @@ function setLang(l){
   renderDynamic();localStorage.setItem('lang7x',l);
 }
 
+function gl(k,l){if(!D[k])return'';if(!l)return D[k];return D[k][l]||''}
+
 function renderDynamic(){
   var ar=lang==='ar',cl=ar?'ar':'en';
+  document.getElementById('htitle').textContent=gl('hero_title',cl)||'7X';
+  document.getElementById('badge').textContent=gl('hero_badge',cl)||'Engineering Intelligence Core';
+  document.getElementById('hsub').textContent=gl('hero_sub',cl)||'';
+  document.querySelector('#about h3').textContent=gl('about_title',cl);
+  document.getElementById('aboutP').innerHTML=gl('about_text',cl);
+  document.querySelector('#company .sec-title').textContent=gl('company_title',cl);
+  document.querySelector('#company .sec-sub').textContent=gl('company_desc',cl);
+
   var cc=document.getElementById('companyCards');cc.innerHTML='';
-  CD[cl].forEach(function(c){cc.innerHTML+='<div class="co-card"><div class="ic">'+c.ic+'</div><h4>'+c.t+'</h4><p>'+c.d+'</p></div>'});
+  (D.company_cards||[]).forEach(function(c){cc.innerHTML+='<div class="co-card"><div class="ic">'+(c.icon||'')+'</div><h4>'+esc(c[cl==='ar'?'title':'titleEn']||c.title||'')+'</h4><p>'+esc(c[cl==='ar'?'desc':'descEn']||c.desc||'')+'</p></div>'});
+
   var ag=document.getElementById('appsGrid');ag.innerHTML='';var lt=ar?'عرض على GitHub ←':'View on GitHub →';
-  AD[cl].forEach(function(a){ag.innerHTML+='<div class="app-card"><div class="app-ic">'+a.ic+'</div><h4>'+a.n+'</h4><p>'+a.d+'</p><a href="'+a.l+'" class="btn-a">'+lt+'</a></div>'});
+  (D.apps||[]).forEach(function(a){ag.innerHTML+='<div class="app-card"><div class="app-ic">'+(a.icon||'')+'</div><h4>'+esc(a.name||'')+'</h4><p>'+esc(a[cl==='ar'?'desc':'descEn']||a.desc||'')+'</p><a href="'+(a.link||'#')+'" class="btn-a" target="_blank">'+lt+'</a></div>'});
+
   var rg=document.getElementById('reposGrid');rg.innerHTML='';
-  RL.forEach(function(r){rg.innerHTML+='<a href="https://github.com/7xze/'+r+'" class="repo-card" target="_blank"><div><div class="repo-nm">'+r+'</div><div class="repo-url">7xze/'+r+'</div></div><span class="repo-arr">→</span></a>'});
+  (D.repos||[]).forEach(function(r){rg.innerHTML+='<a href="'+gh+r+'" class="repo-card" target="_blank"><div><div class="repo-nm">'+r+'</div><div class="repo-url">7xze/'+r+'</div></div><span class="repo-arr">→</span></a>'});
+
+  var ce=gl('contact_email',''),cm=gl('contact_matrix',''),cg=gl('contact_github','');
+  document.querySelectorAll('.ci').forEach(function(el,i){
+    if(i===0&&ce)el.querySelector('span').textContent=ce;
+    if(i===1&&cm)el.querySelector('span').textContent=cm;
+    if(i===2&&cg)el.querySelector('span').textContent='github.com/'+cg;
+  });
 }
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 // Scroll animations
 var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});
 document.querySelectorAll('.fade-in').forEach(function(el){obs.observe(el)});
 
-// Load editable content from content.json
-fetch('content.json').then(function(r){return r.json()}).then(function(d){
-  if(d.hero_title)document.getElementById('htitle').textContent=d.hero_title[lang];
-  if(d.hero_badge)document.getElementById('badge').textContent=d.hero_badge[lang];
-  if(d.hero_sub)document.getElementById('hsub').textContent=d.hero_sub[lang];
-  if(d.about_title)document.querySelector('#about h3').textContent=d.about_title[lang];
-  if(d.about_text)document.getElementById('aboutP').innerHTML=d.about_text[lang];
-}).catch(function(){});
+// Load ALL content from content.json (cache bust)
+fetch('content.json?'+Date.now()).then(function(r){return r.json()}).then(function(d){
+  D=d;setLang(lang);
+}).catch(function(){setLang(lang)});
 
 setLang(lang);
 </script>
