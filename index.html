@@ -1,139 +1,348 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="site-title">7X</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7X — Engineering Intelligence Core</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a2e;--primary:#00843D;--primary-light:#00b84d;--white:#fff;--text:#e0e0e0;--text2:#8888a0;--border:#2a2a3e;--radius:12px;--mw:1100px}
+body{font-family:'Inter','Noto Kufi Arabic',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+a{color:var(--primary-light);text-decoration:none;transition:.3s}
+a:hover{color:var(--white)}
+.container{max-width:var(--mw);margin:0 auto;padding:0 24px}
+
+nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(10,10,15,.85);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+.nav-inner{display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:1.4rem;color:var(--white);letter-spacing:2px}
+.logo span{color:var(--primary-light)}
+nav ul{display:flex;gap:32px;list-style:none;align-items:center}
+nav ul a{color:var(--text2);font-size:.85rem;font-weight:500;text-transform:uppercase;letter-spacing:1px}
+nav ul a:hover{color:var(--white)}
+.lang-switch{display:flex;gap:4px}
+.lang-switch a{padding:4px 10px;border-radius:6px;font-size:.75rem;font-weight:700;background:var(--bg3);color:var(--text2);text-transform:uppercase}
+.lang-switch a.active{background:var(--primary);color:var(--white)}
+
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:120px 0 80px}
+.hero::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(0,132,61,.15) 0%,transparent 70%);top:-200px;left:-200px;border-radius:50%;pointer-events:none}
+.hero::after{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(206,17,38,.1) 0%,transparent 70%);bottom:-100px;right:-100px;border-radius:50%;pointer-events:none}
+.hero-content{position:relative;z-index:1}
+.hero-badge{display:inline-block;padding:8px 20px;border-radius:50px;background:rgba(0,132,61,.15);border:1px solid rgba(0,132,61,.3);color:var(--primary-light);font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:24px}
+.hero h1{font-size:clamp(3rem,10vw,5.5rem);font-weight:900;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,var(--white) 0%,var(--primary-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.2rem;color:var(--text2);max-width:600px;margin:0 auto 32px}
+
+.btn{display:inline-block;padding:14px 36px;border-radius:50px;font-weight:600;font-size:.9rem;cursor:pointer;transition:.3s;border:none;text-transform:uppercase;letter-spacing:1px}
+.btn-primary{background:var(--primary);color:var(--white)}
+.btn-primary:hover{background:var(--primary-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,132,61,.3)}
+.btn-outline{background:transparent;color:var(--white);border:2px solid var(--border)}
+.btn-outline:hover{border-color:var(--primary-light);color:var(--primary-light);transform:translateY(-2px)}
+.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+section{padding:100px 0}
+#company,#repos{background:var(--bg2)}
+.section-center{text-align:center;margin-bottom:48px}
+.section-tag{display:inline-block;padding:6px 16px;border-radius:50px;background:rgba(0,132,61,.1);border:1px solid rgba(0,132,61,.2);color:var(--primary-light);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.section-title{font-size:clamp(2rem,5vw,2.8rem);font-weight:800;margin-bottom:16px;color:var(--white)}
+.section-subtitle{color:var(--text2);max-width:600px;margin:0 auto 48px;font-size:1.05rem}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-text h3{font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;margin-bottom:20px;color:var(--white)}
+.about-text p{color:var(--text2);margin-bottom:16px;font-size:1.05rem}
+.about-visual{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:48px;text-align:center}
+.about-flag{font-size:5rem;margin-bottom:16px}
+.about-visual h4{color:var(--white);font-weight:700}
+.about-moto{color:var(--text2);margin:8px 0 24px}
+.about-tags{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.about-tags span{padding:6px 14px;background:var(--bg3);border-radius:50px;font-size:.75rem;color:var(--text2)}
+
+.company-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.company-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:36px;transition:.3s;text-align:center}
+.company-card:hover{border-color:var(--primary);transform:translateY(-4px)}
+.company-card .icon{font-size:2rem;margin-bottom:16px}
+.company-card h4{font-size:1.2rem;font-weight:700;margin-bottom:12px;color:var(--white)}
+.company-card p{color:var(--text2);font-size:.9rem}
+
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.app-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:32px;transition:.3s}
+.app-card:hover{border-color:var(--primary-light);transform:translateY(-4px)}
+.app-icon{width:56px;height:56px;border-radius:14px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
+.app-card h4{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--white)}
+.app-card p{color:var(--text2);font-size:.85rem;margin-bottom:16px}
+.app-link{font-size:.8rem;font-weight:600;color:var(--primary-light)}
+
+.repos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.repo-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;transition:.3s;color:var(--text)}
+.repo-card:hover{border-color:var(--primary-light);color:var(--white)}
+.repo-info h4{font-size:1rem;font-weight:600;color:inherit;margin-bottom:4px}
+.repo-info p{font-size:.8rem;color:var(--text2)}
+.repo-arrow{color:var(--text2);font-size:1.2rem;transition:.3s}
+.repo-card:hover .repo-arrow{color:var(--primary-light);transform:translateX(4px)}
+
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.contact-info h3{font-size:1.5rem;font-weight:700;margin-bottom:16px;color:var(--white)}
+.contact-info>p{color:var(--text2);margin-bottom:32px}
+.contact-item{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.ci-icon{width:48px;height:48px;border-radius:12px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.ci-text h5{font-size:.85rem;font-weight:600;color:var(--white)}
+.ci-text span{font-size:.8rem;color:var(--text2)}
+.contact-form{display:flex;flex-direction:column;gap:16px}
+.contact-form input,.contact-form textarea{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-family:inherit;font-size:.9rem;color:var(--white);outline:none;transition:.3s}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--primary)}
+.contact-form textarea{min-height:140px;resize:vertical}
+
+footer{border-top:1px solid var(--border);padding:40px 0;text-align:center}
+footer p{color:var(--text2);font-size:.85rem}
+.syria{color:var(--primary-light);font-weight:600}
+.footer-tagline{margin-top:8px;font-size:.75rem;color:var(--text2)}
+
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+
+@media(max-width:768px){
+  nav ul li:not(.lang-switch){display:none}
+  .about-grid,.contact-grid{grid-template-columns:1fr}
+  section{padding:60px 0}
+  .about-grid{gap:32px}
+}
+</style>
 </head>
 <body>
-  <nav>
-    <div class="container nav-inner">
-      <div class="logo">7<span>X</span></div>
-      <ul id="nav-links">
-        <li><a href="#about" data-ar="من أنا" data-en="About">من أنا</a></li>
-        <li><a href="#company" data-ar="الشركة" data-en="Company">الشركة</a></li>
-        <li><a href="#apps" data-ar="التطبيقات" data-en="Apps">التطبيقات</a></li>
-        <li><a href="#repos" data-ar="المستودعات" data-en="Repos">المستودعات</a></li>
-        <li><a href="#contact" data-ar="اتصل بنا" data-en="Contact">اتصل بنا</a></li>
-        <li class="lang-switch">
-          <a href="#" onclick="setLang('ar')" class="active" id="lang-ar">ع</a>
-          <a href="#" onclick="setLang('en')" id="lang-en">EN</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
 
-  <section class="hero" id="home">
-    <div class="container hero-content">
-      <div class="hero-badge" id="hero-badge">نواة الهندسة الذكية</div>
-      <h1 id="hero-title">7X</h1>
-      <p id="hero-subtitle">بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم</p>
-      <div class="hero-cta">
-        <a href="#about" class="btn btn-primary" id="btn-explore" data-ar="استكشف" data-en="Explore">استكشف</a>
-        <a href="#repos" class="btn btn-outline" id="btn-repos" data-ar="المستودعات" data-en="Repositories">المستودعات</a>
-      </div>
-    </div>
-  </section>
+<nav>
+<div class="container nav-inner">
+<div class="logo">7<span>X</span></div>
+<ul>
+<li><a href="#about" data-ar="من أنا" data-en="About">من أنا</a></li>
+<li><a href="#company" data-ar="الشركة" data-en="Company">الشركة</a></li>
+<li><a href="#apps" data-ar="التطبيقات" data-en="Apps">التطبيقات</a></li>
+<li><a href="#repos" data-ar="المستودعات" data-en="Repos">المستودعات</a></li>
+<li><a href="#contact" data-ar="اتصل بنا" data-en="Contact">اتصل بنا</a></li>
+<li class="lang-switch">
+<a href="#" onclick="setLang('ar')" class="active" id="lar">ع</a>
+<a href="#" onclick="setLang('en')" id="len">EN</a>
+</li>
+</ul>
+</div>
+</nav>
 
-  <section id="about">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-text">
-          <div class="section-tag" id="about-tag" data-ar="من أنا" data-en="Who I Am">من أنا</div>
-          <h3 id="about-title">مَهندس. مؤسس. صاحب رؤية</h3>
-          <p id="about-text">أنا مؤسس <strong>7X Syria Ltd.</strong> — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر.</p>
-        </div>
-        <div class="about-visual">
-          <div class="about-flag">🇸🇾</div>
-          <h4 id="about-proud" data-ar="سوري بفخر" data-en="Proudly Syrian">سوري بفخر</h4>
-          <p class="about-moto">صنع في سوريا</p>
-          <div class="about-tags">
-            <span>Kotlin</span><span>Compose</span><span>Rust</span><span>Matrix</span><span>Android</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="hero" id="home">
+<div class="container hero-content">
+<div class="hero-badge" id="badge">Engineering Intelligence Core</div>
+<h1 id="htitle">7X</h1>
+<p id="hsub" data-ar="بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم" data-en="Building secure, open-source technology for Syria and beyond">بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم</p>
+<div class="hero-cta">
+<a href="#about" class="btn btn-primary" data-ar="استكشف" data-en="Explore">استكشف</a>
+<a href="#repos" class="btn btn-outline" data-ar="المستودعات" data-en="Repositories">المستودعات</a>
+</div>
+</div>
+</section>
 
-  <section id="company">
-    <div class="container">
-      <div class="section-center">
-        <div class="section-tag" data-ar="الشركة" data-en="Company" id="company-tag">الشركة</div>
-        <h2 class="section-title" id="company-title">7X Syria Ltd.</h2>
-        <p class="section-subtitle" id="company-desc">نواة الهندسة الذكية — نبني تقنية آمنة لمستقبل متصل.</p>
-      </div>
-      <div class="company-cards" id="company-cards"></div>
-    </div>
-  </section>
+<section id="about">
+<div class="container">
+<div class="about-grid">
+<div class="about-text">
+<div class="section-tag" data-ar="من أنا" data-en="Who I Am">من أنا</div>
+<h3 data-ar="مهندس. مؤسس. صاحب رؤية" data-en="Engineer. Founder. Visionary.">مهندس. مؤسس. صاحب رؤية</h3>
+<p data-ar="أنا مؤسس <strong>7X Syria Ltd.</strong> — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر. أركز على تطبيقات Android المشفّرة وبروتوكول Matrix." data-en="I am the founder of <strong>7X Syria Ltd.</strong> — building secure, open-source communication tools for Syria and the world.">أنا مؤسس <strong>7X Syria Ltd.</strong> — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر.</p>
+</div>
+<div class="about-visual">
+<div class="about-flag">🇸🇾</div>
+<h4 data-ar="سوري بفخر" data-en="Proudly Syrian">سوري بفخر</h4>
+<p class="about-moto">صنع في سوريا</p>
+<div class="about-tags"><span>Kotlin</span><span>Compose</span><span>Rust</span><span>Matrix</span><span>Android</span></div>
+</div>
+</div>
+</div>
+</section>
 
-  <section id="apps">
-    <div class="container">
-      <div class="section-center">
-        <div class="section-tag" data-ar="التطبيقات" data-en="Applications" id="apps-tag">التطبيقات</div>
-        <h2 class="section-title" id="apps-title" data-ar="تطبيقاتنا" data-en="Our Apps">تطبيقاتنا</h2>
-        <p class="section-subtitle" id="apps-sub" data-ar="تطبيقات آمنة وعصرية بأحدث التقنيات." data-en="Secure, modern applications built with cutting-edge technology.">تطبيقات آمنة وعصرية بأحدث التقنيات.</p>
-      </div>
-      <div class="apps-grid" id="apps-grid"></div>
-    </div>
-  </section>
+<section id="company">
+<div class="container">
+<div class="section-center">
+<div class="section-tag" data-ar="الشركة" data-en="Company">الشركة</div>
+<h2 class="section-title">7X Syria Ltd.</h2>
+<p class="section-subtitle" data-ar="نواة الهندسة الذكية — نبني تقنية آمنة لمستقبل متصل." data-en="Engineering Intelligence Core — Building secure technology for a connected future.">نواة الهندسة الذكية — نبني تقنية آمنة لمستقبل متصل.</p>
+</div>
+<div class="company-cards" id="company-cards"></div>
+</div>
+</section>
 
-  <section id="repos">
-    <div class="container">
-      <div class="section-center">
-        <div class="section-tag" data-ar="المستودعات" data-en="Repositories" id="repos-tag">المستودعات</div>
-        <h2 class="section-title" data-ar="كودنا" data-en="Our Code" id="repos-title">كودنا</h2>
-        <p class="section-subtitle" data-ar="كل المشاريع مفتوحة المصدر. المساهمات مرحّب بها." data-en="All projects are open source. Contributions welcome." id="repos-sub">كل المشاريع مفتوحة المصدر. المساهمات مرحّب بها.</p>
-      </div>
-      <div class="repos-grid" id="repos-grid"></div>
-    </div>
-  </section>
+<section id="apps">
+<div class="container">
+<div class="section-center">
+<div class="section-tag" data-ar="التطبيقات" data-en="Applications">التطبيقات</div>
+<h2 class="section-title" data-ar="تطبيقاتنا" data-en="Our Apps">تطبيقاتنا</h2>
+<p class="section-subtitle" data-ar="تطبيقات آمنة وعصرية بأحدث التقنيات." data-en="Secure, modern applications built with cutting-edge technology.">تطبيقات آمنة وعصرية بأحدث التقنيات.</p>
+</div>
+<div class="apps-grid" id="apps-grid"></div>
+</div>
+</section>
 
-  <section id="contact">
-    <div class="container">
-      <div class="section-center">
-        <div class="section-tag" data-ar="اتصل بنا" data-en="Contact" id="contact-tag">اتصل بنا</div>
-        <h2 class="section-title" id="contact-title" data-ar="تواصل معي" data-en="Get in Touch">تواصل معي</h2>
-        <p class="section-subtitle" id="contact-sub" data-ar="عندك سؤال أو تريد تتعاون؟ تواصل معي." data-en="Have a question or want to collaborate? Reach out.">عندك سؤال أو تريد تتعاون؟ تواصل معي.</p>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <h3 id="contact-h3" data-ar="هيا بنا نتحدث" data-en="Let's talk">هيا بنا نتحدث</h3>
-          <p id="contact-p" data-ar="دائماً منفتح لمشاريع جديدة وأفكار إبداعية." data-en="Always open to new projects, creative ideas.">دائماً منفتح لمشاريع جديدة وأفكار إبداعية.</p>
-          <div class="contact-item">
-            <div class="ci-icon">📧</div>
-            <div class="ci-text"><h5>Email</h5><span id="contact-email">contact@7xsyria.com</span></div>
-          </div>
-          <div class="contact-item">
-            <div class="ci-icon">💬</div>
-            <div class="ci-text"><h5>Matrix</h5><span id="contact-matrix">@7x:matrix.org</span></div>
-          </div>
-          <div class="contact-item">
-            <div class="ci-icon">🐙</div>
-            <div class="ci-text"><h5>GitHub</h5><span id="contact-github">github.com/7xze</span></div>
-          </div>
-        </div>
-        <form class="contact-form" action="https://formspree.io/f/meoaeldo" method="POST">
-          <input type="text" name="name" id="form-name" placeholder="الاسم" required>
-          <input type="email" name="email" id="form-email" placeholder="البريد الإلكتروني" required>
-          <input type="text" name="subject" id="form-subject" placeholder="الموضوع">
-          <textarea name="message" id="form-message" placeholder="رسالتك..." required></textarea>
-          <button type="submit" class="btn btn-primary" id="form-btn" data-ar="إرسال" data-en="Send Message">إرسال</button>
-        </form>
-      </div>
-    </div>
-  </section>
+<section id="repos">
+<div class="container">
+<div class="section-center">
+<div class="section-tag" data-ar="المستودعات" data-en="Repositories">المستودعات</div>
+<h2 class="section-title" data-ar="كودنا" data-en="Our Code">كودنا</h2>
+<p class="section-subtitle" data-ar="كل المشاريع مفتوحة المصدر. المساهمات مرحّب بها." data-en="All projects are open source. Contributions welcome.">كل المشاريع مفتوحة المصدر. المساهمات مرحّب بها.</p>
+</div>
+<div class="repos-grid" id="repos-grid"></div>
+</div>
+</section>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 <span class="syria">7X Syria Ltd.</span> — <span id="footer-text">صنع في سوريا</span></p>
-      <p class="footer-tagline" data-ar="نواة الهندسة الذكية" data-en="Engineering Intelligence Core" id="footer-tagline">نواة الهندسة الذكية</p>
-    </div>
-  </footer>
+<section id="contact">
+<div class="container">
+<div class="section-center">
+<div class="section-tag" data-ar="اتصل بنا" data-en="Contact">اتصل بنا</div>
+<h2 class="section-title" data-ar="تواصل معي" data-en="Get in Touch">تواصل معي</h2>
+<p class="section-subtitle" data-ar="عندك سؤال أو تريد تتعاون؟ تواصل معي." data-en="Have a question or want to collaborate? Reach out.">عندك سؤال أو تريد تتعاون؟ تواصل معي.</p>
+</div>
+<div class="contact-grid">
+<div class="contact-info">
+<h3 data-ar="هيا بنا نتحدث" data-en="Let's talk">هيا بنا نتحدث</h3>
+<p data-ar="دائماً منفتح لمشاريع جديدة وأفكار إبداعية." data-en="Always open to new projects, creative ideas.">دائماً منفتح لمشاريع جديدة وأفكار إبداعية.</p>
+<div class="contact-item"><div class="ci-icon">📧</div><div class="ci-text"><h5>Email</h5><span>contact@7xsyria.com</span></div></div>
+<div class="contact-item"><div class="ci-icon">💬</div><div class="ci-text"><h5>Matrix</h5><span>@7x:matrix.org</span></div></div>
+<div class="contact-item"><div class="ci-icon">🐙</div><div class="ci-text"><h5>GitHub</h5><span>github.com/7xze</span></div></div>
+</div>
+<form class="contact-form" action="https://formspree.io/f/meoaeldo" method="POST">
+<input type="text" name="name" id="fname" placeholder="الاسم" required>
+<input type="email" name="email" id="femail" placeholder="البريد الإلكتروني" required>
+<input type="text" name="subject" id="fsubj" placeholder="الموضوع">
+<textarea name="message" id="fmsg" placeholder="رسالتك..." required></textarea>
+<button type="submit" class="btn btn-primary" data-ar="إرسال" data-en="Send Message">إرسال</button>
+</form>
+</div>
+</div>
+</section>
 
-  <script src="script.js"></script>
+<footer>
+<div class="container">
+<p>&copy; 2025 <span class="syria">7X Syria Ltd.</span> — <span data-ar="صنع في سوريا" data-en="Made in Syria">صنع في سوريا</span></p>
+<p class="footer-tagline" data-ar="نواة الهندسة الذكية" data-en="Engineering Intelligence Core">نواة الهندسة الذكية</p>
+</div>
+</footer>
+
+<script>
+// Data
+var companyData = {
+  ar: [
+    {icon:'🎯',title:'المهمة',text:'إضفاء الطابع الديمقراطي على التواصل الآمن في سوريا والعالم العربي.'},
+    {icon:'🛡️',title:'الأمان أولاً',text:'الخصوصية ليست خياراً. كل منتج مبني بأقوى معايير التشفير.'},
+    {icon:'🌍',title:'مفتوح المصدر',text:'100% من كودنا مفتوح المصدر. تقنية شفافة يمكن للجميع تدقيقها.'},
+    {icon:'🇸🇾',title:'صنع في سوريا',text:'نفتخر بأننا سوريون. نمثل الهندسة السورية على المستوى العالمي.'}
+  ],
+  en: [
+    {icon:'🎯',title:'Mission',text:'Democratising secure communication across Syria and the Arab world.'},
+    {icon:'🛡️',title:'Security First',text:'Privacy is not optional. Every product uses the strongest encryption.'},
+    {icon:'🌍',title:'Open Source',text:'100% of our code is open source. Transparent technology anyone can trust.'},
+    {icon:'🇸🇾',title:'Made in Syria',text:'Proudly Syrian. Representing Syrian engineering globally.'}
+  ]
+};
+
+var appsData = {
+  ar: [
+    {icon:'💬',name:'Alttyar',desc:'تطبيق مراسلة Matrix مشفّر لنظام Android.',link:'https://github.com/7xze/Alttyar-Android-app'},
+    {icon:'⚡',name:'Alttyar-Backend',desc:'خدمات الخلفية لمنصة Alttyar.',link:'https://github.com/7xze/Altyyar-serves'},
+    {icon:'🤖',name:'Vexa-Ai-Hacke',desc:'أدوات وتجارب بالذكاء الاصطناعي.',link:'https://github.com/7xze/Vexa-Ai-Hacke'},
+    {icon:'📱',name:'Vexa Android',desc:'مجموعة تطبيقات Android بهندسة عصرية.',link:'https://github.com/7xze/Vexa-Android-app'}
+  ],
+  en: [
+    {icon:'💬',name:'Alttyar',desc:'End-to-end encrypted Matrix messaging app for Android.',link:'https://github.com/7xze/Alttyar-Android-app'},
+    {icon:'⚡',name:'Alttyar-Backend',desc:'Backend services for the Alttyar ecosystem.',link:'https://github.com/7xze/Altyyar-serves'},
+    {icon:'🤖',name:'Vexa-Ai-Hacke',desc:'AI-powered tools and experiments.',link:'https://github.com/7xze/Vexa-Ai-Hacke'},
+    {icon:'📱',name:'Vexa Android',desc:'Android application suite with modern architecture.',link:'https://github.com/7xze/Vexa-Android-app'}
+  ]
+};
+
+var reposList = ['Alttyar-Android-app','Altyyar-serves','Alttyar-apk','Vexa-Ai-Hacke','Vexa-Android-app','Vexa-serves','Vexa-apk','vexa-src'];
+
+var lang = localStorage.getItem('lang') || 'ar';
+
+function setLang(l) {
+  lang = l;
+  var isAr = l === 'ar';
+  document.documentElement.lang = l;
+  document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+  document.getElementById('lar').className = isAr ? 'active' : '';
+  document.getElementById('len').className = isAr ? '' : 'active';
+
+  // Nav links
+  var navLabels = {ar:['من أنا','الشركة','التطبيقات','المستودعات','اتصل بنا'],en:['About','Company','Apps','Repos','Contact']};
+  var navLinks = document.querySelectorAll('nav ul li:not(.lang-switch) a');
+  for(var i=0;i<navLinks.length;i++) navLinks[i].textContent = navLabels[l][i];
+
+  // Hero
+  document.getElementById('badge').textContent = isAr ? 'Engineering Intelligence Core' : 'Engineering Intelligence Core';
+  document.getElementById('hsub').textContent = isAr ? 'بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم' : 'Building secure, open-source technology for Syria and beyond';
+
+  // Buttons
+  document.querySelectorAll('.btn[data-ar]').forEach(function(el){
+    el.textContent = el.getAttribute('data-'+l);
+  });
+
+  // data-ar elements
+  document.querySelectorAll('[data-ar]').forEach(function(el){
+    if(el.id!=='hsub' && !el.classList.contains('btn')) el.textContent = el.getAttribute('data-'+l);
+  });
+
+  // Form placeholders
+  document.getElementById('fname').placeholder = isAr ? 'الاسم' : 'Your Name';
+  document.getElementById('femail').placeholder = isAr ? 'البريد الإلكتروني' : 'Your Email';
+  document.getElementById('fsubj').placeholder = isAr ? 'الموضوع' : 'Subject';
+  document.getElementById('fmsg').placeholder = isAr ? 'رسالتك...' : 'Your Message...';
+
+  // Links
+  var lt = isAr ? 'عرض على GitHub ←' : 'View on GitHub →';
+  document.querySelectorAll('.app-link').forEach(function(el){el.textContent=lt;});
+
+  renderDynamic();
+  localStorage.setItem('lang',l);
+}
+
+function renderDynamic() {
+  var isAr = lang === 'ar';
+  var cl = isAr ? 'ar' : 'en';
+
+  // Company cards
+  var cc = document.getElementById('company-cards');
+  cc.innerHTML = '';
+  companyData[cl].forEach(function(c){
+    cc.innerHTML += '<div class="company-card"><div class="icon">'+c.icon+'</div><h4>'+c.title+'</h4><p>'+c.text+'</p></div>';
+  });
+
+  // Apps
+  var ag = document.getElementById('apps-grid');
+  ag.innerHTML = '';
+  var lt = isAr ? 'عرض على GitHub ←' : 'View on GitHub →';
+  appsData[cl].forEach(function(a){
+    ag.innerHTML += '<div class="app-card"><div class="app-icon">'+a.icon+'</div><h4>'+a.name+'</h4><p>'+a.desc+'</p><a href="'+a.link+'" class="app-link">'+lt+'</a></div>';
+  });
+
+  // Repos
+  var rg = document.getElementById('repos-grid');
+  rg.innerHTML = '';
+  reposList.forEach(function(r){
+    rg.innerHTML += '<a href="https://github.com/7xze/'+r+'" class="repo-card"><div class="repo-info"><h4>'+r+'</h4><p>'+r+'</p></div><span class="repo-arrow">→</span></a>';
+  });
+}
+
+setLang(lang);
+
+// Load editable content from content.json
+fetch('content.json').then(function(r){return r.json()}).then(function(d){
+  if(d.hero_title) document.getElementById('htitle').textContent = d.hero_title[lang];
+  if(d.hero_badge) document.getElementById('badge').textContent = d.hero_badge[lang];
+  if(d.about_title) document.querySelector('#about .about-text h3').textContent = d.about_title[lang];
+  if(d.about_text) document.querySelector('#about .about-text p').innerHTML = d.about_text[lang];
+  if(d.company_title) document.querySelector('#company .section-title').textContent = d.company_title[lang];
+  if(d.company_desc) document.querySelector('#company .section-subtitle').textContent = d.company_desc[lang];
+  if(d.footer_text) document.querySelector('footer .container p').innerHTML = '&copy; 2025 <span class="syria">7X Syria Ltd.</span> — '+d.footer_text[lang];
+}).catch(function(){});
+</script>
 </body>
 </html>
