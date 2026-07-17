@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7X — {{ 'إدارة المحتوى' if lang == 'ar' else 'Content Manager' }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Kufi Arabic', sans-serif;
+      background: #0a0a0f; color: #e0e0e0;
+    }
+    .sidebar {
+      position: fixed; top: 0; bottom: 0; {{ 'right' if lang == 'ar' else 'left' }}: 0; width: 240px;
+      background: #12121a; border-{{ 'left' if lang == 'ar' else 'right' }}: 1px solid #2a2a3e;
+      padding: 24px; overflow-y: auto;
+    }
+    .sidebar h2 { font-size: 1.3rem; margin-bottom: 24px; }
+    .sidebar h2 span { color: #00b84d; }
+    .sidebar a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 10px; color: #8888a0;
+      text-decoration: none; transition: 0.3s; margin-bottom: 4px;
+    }
+    .sidebar a:hover, .sidebar a.active { background: #1a1a2e; color: #fff; }
+    .main { margin-{{ 'left' if lang == 'ar' else 'right' }}: 240px; padding: 32px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .header h1 { font-size: 1.5rem; }
+    .back { padding: 8px 20px; border-radius: 8px; background: #2a2a3e; color: #e0e0e0; text-decoration: none; font-size: 0.85rem; }
+    .content-card { background: #12121a; border: 1px solid #2a2a3e; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .content-card h3 { font-size: 1rem; margin-bottom: 16px; color: #00b84d; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
+    .field-group label { display: block; font-size: 0.8rem; color: #8888a0; margin-bottom: 6px; }
+    .field-group input, .field-group textarea {
+      width: 100%; padding: 12px; border-radius: 8px;
+      background: #1a1a2e; border: 1px solid #2a2a3e;
+      color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;
+    }
+    .field-group input:focus, .field-group textarea:focus { border-color: #00843D; }
+    .field-group textarea { min-height: 80px; resize: vertical; }
+    .field-group .label-ar { border-right: 3px solid #00843D; }
+    .field-group .label-en { border-right: 3px solid #ce1126; }
+    .save-btn {
+      padding: 14px 36px; border: none; border-radius: 10px;
+      background: #00843D; color: #fff; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: 0.3s; margin-top: 16px;
+    }
+    .save-btn:hover { background: #00b84d; }
+    .flash { padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+    .flash.success { background: rgba(0,132,61,0.15); border: 1px solid #00843D; color: #00b84d; }
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; }
+      .sidebar a span { display: none; }
+      .main { margin-{{ 'left' if lang == 'ar' else 'right' }}: 60px; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>7<span>X</span></h2>
+    <a href="{{ url_for('admin_dashboard') }}">📊 <span>{{ 'لوحة التحكم' if lang == 'ar' else 'Dashboard' }}</span></a>
+    <a href="{{ url_for('admin_messages') }}">💬 <span>{{ 'الرسائل' if lang == 'ar' else 'Messages' }}</span></a>
+    <a href="{{ url_for('admin_content') }}" class="active">✏️ <span>{{ 'المحتوى' if lang == 'ar' else 'Content' }}</span></a>
+    <a href="{{ url_for('index') }}">🏠 <span>{{ 'الموقع' if lang == 'ar' else 'Site' }}</span></a>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>{{ 'إدارة المحتوى' if lang == 'ar' else 'Content Manager' }}</h1>
+      <a href="{{ url_for('admin_dashboard') }}" class="back">← {{ 'العودة' if lang == 'ar' else 'Back' }}</a>
+    </div>
+
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% if msgs %}
+        {% for cat, msg in msgs %}
+          <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+      {% set labels = {'ar': {
+        'hero_title': 'عنوان الرئيسية', 'hero_subtitle': 'الوصف', 'hero_badge': 'الشارة',
+        'about_title': 'عنوان من أنا', 'about_text': 'نص من أنا',
+        'company_title': 'عنوان الشركة', 'company_desc': 'وصف الشركة',
+        'footer_text': 'نص التذييل', 'contact_email': 'البريد الإلكتروني',
+        'contact_matrix': 'Matrix', 'contact_github': 'GitHub'
+      }, 'en': {
+        'hero_title': 'Hero Title', 'hero_subtitle': 'Hero Subtitle', 'hero_badge': 'Hero Badge',
+        'about_title': 'About Title', 'about_text': 'About Text',
+        'company_title': 'Company Title', 'company_desc': 'Company Description',
+        'footer_text': 'Footer Text', 'contact_email': 'Email',
+        'contact_matrix': 'Matrix', 'contact_github': 'GitHub'
+      }} %}
+
+      {% for key, content in contents.items() %}
+      <div class="content-card">
+        <h3>{{ labels[lang][key] }}</h3>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="label-ar">🇸🇾 العربية</label>
+            {% if key in ('about_text',) %}
+            <textarea name="{{ key }}_ar">{{ content.value_ar }}</textarea>
+            {% else %}
+            <input type="text" name="{{ key }}_ar" value="{{ content.value_ar }}">
+            {% endif %}
+          </div>
+          <div class="field-group">
+            <label class="label-en">🇬🇧 English</label>
+            {% if key in ('about_text',) %}
+            <textarea name="{{ key }}_en">{{ content.value_en }}</textarea>
+            {% else %}
+            <input type="text" name="{{ key }}_en" value="{{ content.value_en }}">
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="save-btn">{{ '💾 حفظ التغييرات' if lang == 'ar' else '💾 Save Changes' }}</button>
+    </form>
+  </div>
+
+</body>
+</html>
