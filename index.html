@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="site-title">7X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <div class="logo">7<span>X</span></div>
+      <ul id="nav-links">
+        <li><a href="#about" data-ar="من أنا" data-en="About">من أنا</a></li>
+        <li><a href="#company" data-ar="الشركة" data-en="Company">الشركة</a></li>
+        <li><a href="#apps" data-ar="التطبيقات" data-en="Apps">التطبيقات</a></li>
+        <li><a href="#repos" data-ar="المستودعات" data-en="Repos">المستودعات</a></li>
+        <li><a href="#contact" data-ar="اتصل بنا" data-en="Contact">اتصل بنا</a></li>
+        <li class="lang-switch">
+          <a href="#" onclick="setLang('ar')" class="active" id="lang-ar">ع</a>
+          <a href="#" onclick="setLang('en')" id="lang-en">EN</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero" id="home">
+    <div class="container hero-content">
+      <div class="hero-badge" id="hero-badge">نواة الهندسة الذكية</div>
+      <h1 id="hero-title">7X</h1>
+      <p id="hero-subtitle">بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم</p>
+      <div class="hero-cta">
+        <a href="#about" class="btn btn-primary" id="btn-explore" data-ar="استكشف" data-en="Explore">استكشف</a>
+        <a href="#repos" class="btn btn-outline" id="btn-repos" data-ar="المستودعات" data-en="Repositories">المستودعات</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-tag" id="about-tag" data-ar="من أنا" data-en="Who I Am">من أنا</div>
+          <h3 id="about-title">مَهندس. مؤسس. صاحب رؤية</h3>
+          <p id="about-text">أنا مؤسس <strong>7X Syria Ltd.</strong> — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر.</p>
+        </div>
+        <div class="about-visual">
+          <div class="about-flag">🇸🇾</div>
+          <h4 id="about-proud" data-ar="سوري بفخر" data-en="Proudly Syrian">سوري بفخر</h4>
+          <p class="about-moto">صنع في سوريا</p>
+          <div class="about-tags">
+            <span>Kotlin</span><span>Compose</span><span>Rust</span><span>Matrix</span><span>Android</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="company">
+    <div class="container">
+      <div class="section-center">
+        <div class="section-tag" data-ar="الشركة" data-en="Company" id="company-tag">الشركة</div>
+        <h2 class="section-title" id="company-title">7X Syria Ltd.</h2>
+        <p class="section-subtitle" id="company-desc">نواة الهندسة الذكية — نبني تقنية آمنة لمستقبل متصل.</p>
+      </div>
+      <div class="company-cards" id="company-cards"></div>
+    </div>
+  </section>
+
+  <section id="apps">
+    <div class="container">
+      <div class="section-center">
+        <div class="section-tag" data-ar="التطبيقات" data-en="Applications" id="apps-tag">التطبيقات</div>
+        <h2 class="section-title" id="apps-title" data-ar="تطبيقاتنا" data-en="Our Apps">تطبيقاتنا</h2>
+        <p class="section-subtitle" id="apps-sub" data-ar="تطبيقات آمنة وعصرية بأحدث التقنيات." data-en="Secure, modern applications built with cutting-edge technology.">تطبيقات آمنة وعصرية بأحدث التقنيات.</p>
+      </div>
+      <div class="apps-grid" id="apps-grid"></div>
+    </div>
+  </section>
+
+  <section id="repos">
+    <div class="container">
+      <div class="section-center">
+        <div class="section-tag" data-ar="المستودعات" data-en="Repositories" id="repos-tag">المستودعات</div>
+        <h2 class="section-title" data-ar="كودنا" data-en="Our Code" id="repos-title">كودنا</h2>
+        <p class="section-subtitle" data-ar="كل المشاريع مفتوحة المصدر. المساهمات مرحّب بها." data-en="All projects are open source. Contributions welcome." id="repos-sub">كل المشاريع مفتوحة المصدر. المساهمات مرحّب بها.</p>
+      </div>
+      <div class="repos-grid" id="repos-grid"></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="section-center">
+        <div class="section-tag" data-ar="اتصل بنا" data-en="Contact" id="contact-tag">اتصل بنا</div>
+        <h2 class="section-title" id="contact-title" data-ar="تواصل معي" data-en="Get in Touch">تواصل معي</h2>
+        <p class="section-subtitle" id="contact-sub" data-ar="عندك سؤال أو تريد تتعاون؟ تواصل معي." data-en="Have a question or want to collaborate? Reach out.">عندك سؤال أو تريد تتعاون؟ تواصل معي.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3 id="contact-h3" data-ar="هيا بنا نتحدث" data-en="Let's talk">هيا بنا نتحدث</h3>
+          <p id="contact-p" data-ar="دائماً منفتح لمشاريع جديدة وأفكار إبداعية." data-en="Always open to new projects, creative ideas.">دائماً منفتح لمشاريع جديدة وأفكار إبداعية.</p>
+          <div class="contact-item">
+            <div class="ci-icon">📧</div>
+            <div class="ci-text"><h5>Email</h5><span id="contact-email">contact@7xsyria.com</span></div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">💬</div>
+            <div class="ci-text"><h5>Matrix</h5><span id="contact-matrix">@7x:matrix.org</span></div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">🐙</div>
+            <div class="ci-text"><h5>GitHub</h5><span id="contact-github">github.com/7xze</span></div>
+          </div>
+        </div>
+        <form class="contact-form" action="https://formspree.io/f/meoaeldo" method="POST">
+          <input type="text" name="name" id="form-name" placeholder="الاسم" required>
+          <input type="email" name="email" id="form-email" placeholder="البريد الإلكتروني" required>
+          <input type="text" name="subject" id="form-subject" placeholder="الموضوع">
+          <textarea name="message" id="form-message" placeholder="رسالتك..." required></textarea>
+          <button type="submit" class="btn btn-primary" id="form-btn" data-ar="إرسال" data-en="Send Message">إرسال</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 <span class="syria">7X Syria Ltd.</span> — <span id="footer-text">صنع في سوريا</span></p>
+      <p class="footer-tagline" data-ar="نواة الهندسة الذكية" data-en="Engineering Intelligence Core" id="footer-tagline">نواة الهندسة الذكية</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

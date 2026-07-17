@@ -1,0 +1,10 @@
+{
+  "hero_title": { "ar": "7X", "en": "7X" },
+  "hero_badge": { "ar": "نواة الهندسة الذكية", "en": "Engineering Intelligence Core" },
+  "hero_subtitle": { "ar": "بناء تقنية آمنة ومفتوحة المصدر لسوريا والعالم", "en": "Building secure, open-source technology for Syria and beyond" },
+  "about_title": { "ar": "مَهندس. مؤسس. صاحب رؤية", "en": "Engineer. Founder. Visionary." },
+  "about_text": { "ar": "أنا مؤسس شركة 7X Syria Ltd. — شركة تقنية سورية مكرّسة لبناء أدوات تواصل آمنة ومفتوحة المصدر.", "en": "I am the founder of 7X Syria Ltd. — a Syrian technology company dedicated to building secure, open-source communication tools." },
+  "company_title": { "ar": "7X Syria Ltd.", "en": "7X Syria Ltd." },
+  "company_desc": { "ar": "نواة الهندسة الذكية — نبني تقنية آمنة لمستقبل متصل.", "en": "Engineering Intelligence Core — Building secure technology for a connected future." },
+  "footer_text": { "ar": "7X Syria Ltd. — صنع في سوريا", "en": "7X Syria Ltd. — Made in Syria" }
+}

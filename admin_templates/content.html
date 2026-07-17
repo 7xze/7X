@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7X — {{ 'إدارة المحتوى' if lang == 'ar' else 'Content' }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter','Noto Kufi Arabic',sans-serif; background:#0a0a0f; color:#e0e0e0; }
+    .sidebar { position:fixed; top:0; bottom:0; {{ 'right' if lang == 'ar' else 'left' }}:0; width:220px; background:#12121a; border-{{ 'left' if lang == 'ar' else 'right' }}:1px solid #2a2a3e; padding:24px; }
+    .sidebar h2 { font-size:1.3rem; margin-bottom:24px; }
+    .sidebar h2 span { color:#00b84d; }
+    .sidebar a { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:10px; color:#8888a0; text-decoration:none; margin-bottom:4px; }
+    .sidebar a:hover, .sidebar a.active { background:#1a1a2e; color:#fff; }
+    .main { margin-{{ 'left' if lang == 'ar' else 'right' }}:220px; padding:32px; }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; }
+    .header h1 { font-size:1.5rem; }
+    .btn { padding:10px 20px; border:none; border-radius:8px; font-family:inherit; font-weight:600; font-size:0.85rem; cursor:pointer; text-decoration:none; }
+    .btn-ghost { background:#2a2a3e; color:#e0e0e0; }
+    .btn-ghost:hover { background:#3a3a4e; }
+    .save-btn { padding:14px 36px; border:none; border-radius:10px; background:#00843D; color:#fff; font-weight:700; font-size:1rem; cursor:pointer; margin-top:16px; }
+    .save-btn:hover { background:#00b84d; }
+    .field-card { background:#12121a; border:1px solid #2a2a3e; border-radius:12px; padding:20px; margin-bottom:16px; }
+    .field-card h3 { font-size:0.95rem; margin-bottom:12px; color:#00b84d; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field-group label { display:block; font-size:0.75rem; color:#8888a0; margin-bottom:4px; padding:2px 8px; border-radius:4px; }
+    .label-ar { border-{{ 'right' if lang == 'ar' else 'left' }}:3px solid #00843D; }
+    .label-en { border-{{ 'right' if lang == 'ar' else 'left' }}:3px solid #ce1126; }
+    .field-group input, .field-group textarea { width:100%; padding:10px 12px; border-radius:8px; background:#1a1a2e; border:1px solid #2a2a3e; color:#fff; font-family:inherit; font-size:0.9rem; outline:none; }
+    .field-group input:focus, .field-group textarea:focus { border-color:#00843D; }
+    .field-group textarea { min-height:70px; resize:vertical; }
+    .flash { padding:12px 20px; border-radius:8px; margin-bottom:20px; text-align:center; }
+    .flash.success { background:rgba(0,132,61,0.15); border:1px solid #00843D; color:#00b84d; }
+    @media(max-width:768px) { .field-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>7<span>X</span></h2>
+    <a href="{{ url_for('dashboard') }}">📊 <span>{{ 'الرئيسية' if lang == 'ar' else 'Dashboard' }}</span></a>
+    <a href="{{ url_for('content') }}" class="active">✏️ <span>{{ 'المحتوى' if lang == 'ar' else 'Content' }}</span></a>
+    <a href="/" target="_blank">🌐 <span>{{ 'الموقع' if lang == 'ar' else 'Site' }}</span></a>
+  </div>
+  <div class="main">
+    <div class="header">
+      <h1>{{ 'إدارة المحتوى' if lang == 'ar' else 'Content Manager' }}</h1>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">← {{ 'العودة' if lang == 'ar' else 'Back' }}</a>
+    </div>
+
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% if msgs %}{% for cat, msg in msgs %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}{% endif %}
+    {% endwith %}
+
+    <form method="post">
+      {% for key, label in keys.items() %}
+      <div class="field-card">
+        <h3>{{ label[lang] }}</h3>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="label-ar">🇸🇾 العربية</label>
+            {% if 'text' in key or key == 'about_text' %}
+            <textarea name="{{ key }}_ar">{{ content[key]['ar'] if key in content else '' }}</textarea>
+            {% else %}
+            <input type="text" name="{{ key }}_ar" value="{{ content[key]['ar'] if key in content else '' }}">
+            {% endif %}
+          </div>
+          <div class="field-group">
+            <label class="label-en">🇬🇧 English</label>
+            {% if 'text' in key or key == 'about_text' %}
+            <textarea name="{{ key }}_en">{{ content[key]['en'] if key in content else '' }}</textarea>
+            {% else %}
+            <input type="text" name="{{ key }}_en" value="{{ content[key]['en'] if key in content else '' }}">
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="submit" class="save-btn">💾 {{ 'حفظ التغييرات' if lang == 'ar' else 'Save Changes' }}</button>
+    </form>
+  </div>
+</body>
+</html>
